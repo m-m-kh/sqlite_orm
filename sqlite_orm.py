@@ -1,5 +1,5 @@
 import sqlite3
-from sqlite3 import OperationalError
+
 
 class Sqlite:
     def __init__(self, path:str) -> None:
@@ -13,16 +13,8 @@ class Sqlite:
             
         
 
-    def insert_one(self, *args):
-        self.__cur.execute(f"insert into test values{args}")
-        self.__con.commit()
+    
         
 
-
-
-
-
-
-db = Sqlite('test/sqlite.db')
-#db.create_table('test', 'name', 'age', 'job')
-db.insert_one('ali', 20, 'doc' , 20)
+db = Sqlite('sqlite_orm/sqlite.db')
+db.create_table('test', 'name', 'age')
