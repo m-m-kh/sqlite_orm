@@ -29,12 +29,15 @@ class Sqlite:
         return result.fetchall()
 
 
-    def find_one(self, table, **kargs):
-        r = tuple(*kargs.items())
-        result = self.__cur.execute(f"select * from {table} where {r[0]} = '{r[1]}' ")
-        return result.fetchall()
-
-
+    def find_one(self, table, pattern=False, **kargs):
+        if pattern:
+            r = tuple(*kargs.items())
+            result = self.__cur.execute(f"select * from {table} where {r[0]} like '{r[1]}' ")
+            return result.fetchall()
+        else:
+            r = tuple(*kargs.items())
+            result = self.__cur.execute(f"select * from {table} where {r[0]} = '{r[1]}' ")
+            return result.fetchall()
 
 
 
@@ -49,5 +52,5 @@ class Sqlite:
 db = Sqlite('sqlite_orm/sqlite.db')
 # db.create_table('test', 'name', 'age')
 # db.insert_many('test', [('hasan' , 15) , ('dwad',156)])
-print(db.find_one('test', name = 'ali'))
+print(db.find_one('test', True, name = 'ha%'))
 db.close()
