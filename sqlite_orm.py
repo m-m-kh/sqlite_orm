@@ -8,23 +8,31 @@ class Sqlite:
         self.__con.commit()
 
 
-    def create_table(self, name:str , *args):
-        self.__cur.execute(f"create table '{name}'{args}")
+    def create_table(self, table:str , *args):
+        self.__cur.execute(f"create table '{table}'{args}")
         self.__con.commit()
 
 
-    def insert_one(self, name,*args):
-        self.__cur.execute(f"insert into {name} values{args}")
+    def insert_one(self, table, *args):
+        self.__cur.execute(f"insert into {table} values{args}")
         self.__con.commit()
 
 
-    def insert_many(self, name, list):
+    def insert_many(self, table, list):
         for i in list:
-            self.__cur.execute(f"insert into {name} values{i}")
+            self.__cur.execute(f"insert into {table} values{i}")
         self.__con.commit()
 
 
+    def find_all(self, table):
+        result = self.__cur.execute(f"select * from {table}")
+        return result.fetchall()
 
+
+    def find_one(self, table, **kargs):
+        r = tuple(*kargs.items())
+        result = self.__cur.execute(f"select * from {table} where {r[0]} = '{r[1]}' ")
+        return result.fetchall()
 
 
 
@@ -39,6 +47,7 @@ class Sqlite:
         
 
 db = Sqlite('sqlite_orm/sqlite.db')
-#db.create_table('test', 'name', 'age')
-db.insert_many('test', [('hasan' , 15) , ('dwad',156)])
+# db.create_table('test', 'name', 'age')
+# db.insert_many('test', [('hasan' , 15) , ('dwad',156)])
+print(db.find_one('test', name = 'ali'))
 db.close()
