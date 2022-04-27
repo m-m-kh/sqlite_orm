@@ -10,7 +10,13 @@ class Sqlite:
     def create_table(self, name:str , *args):
         self.__cur.execute(f"create table '{name}'{args}")
         self.__con.commit()
-            
+
+
+    def insert_one(self, *args):
+        self.__cur.execute(f"insert into test values{args}")
+        self.__con.commit()
+
+
     def close(self):
         self.__con.close()    
 
@@ -19,4 +25,5 @@ class Sqlite:
 
 db = Sqlite('sqlite_orm/sqlite.db')
 #db.create_table('test', 'name', 'age')
+db.insert_one('ali', 20)
 db.close()
