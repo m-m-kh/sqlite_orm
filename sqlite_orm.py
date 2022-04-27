@@ -11,10 +11,12 @@ class Sqlite:
         self.__cur.execute(f"create table '{name}'{args}")
         self.__con.commit()
             
-        
+    def close(self):
+        self.__con.close()    
 
     
         
 
 db = Sqlite('sqlite_orm/sqlite.db')
-db.create_table('test', 'name', 'age')
+#db.create_table('test', 'name', 'age')
+db.close()
