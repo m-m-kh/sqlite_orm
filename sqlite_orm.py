@@ -40,17 +40,39 @@ class Sqlite:
             return result.fetchall()
 
 
+    def update(self, table, set:dict, where:dict, pattern=False):
+        
+        if pattern:
+            s = tuple(set.items())[0]
+            w = tuple(where.items())[0]
+            self.__cur.execute(f" update {table} set {s[0]} = '{s[1]}' where {w[0]} like '{w[1]}' ")
+            self.__con.commit()
+        else:
+            s = tuple(set.items())[0]
+            w = tuple(where.items())[0]
+            self.__cur.execute(f" update {table} set {s[0]} = '{s[1]}' where {w[0]} = '{w[1]}' ")
+            self.__con.commit()
 
 
-    
+    def delete_item(self, table, pattern=False, **kargs):
+        if pattern:
+            r = tuple(*kargs.items()) 
+            self.__cur.execute(f"delete from {table} where {r[0]} like '{r[1]}' ")
+            self.__con.commit()
+        else:
+            r = tuple(*kargs.items())
+            self.__cur.execute(f"delete from {table} where {r[0]} = '{r[1]}' ")
+            self.__con.commit()
+
+
+    def delete_table(self, table):
+        self.__cur.execute(f"drop table {table}")
+
+
+
     def close(self):
         self.__con.close()    
 
     
         
 
-db = Sqlite('sqlite_orm/sqlite.db')
-# db.create_table('test', 'name', 'age')
-# db.insert_many('test', [('hasan' , 15) , ('dwad',156)])
-print(db.find_one('test', True, name = 'ha%'))
-db.close()
